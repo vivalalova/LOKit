@@ -21,6 +21,7 @@ extension Console {
         case info
         case warning
         case error
+        case none
 
         var string: String {
             switch self {
@@ -34,6 +35,8 @@ extension Console {
                 return "warning"
             case .error:
                 return "error"
+            case .none:
+                return ""
             }
         }
 
@@ -49,6 +52,8 @@ extension Console {
                 return .yellow
             case .error:
                 return .red
+            case .none:
+                return .white
             }
         }
 
@@ -64,6 +69,8 @@ extension Console {
                 return "🟨"
             case .error:
                 return "🟥"
+            case .none:
+                return ""
             }
         }
     }

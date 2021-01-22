@@ -20,8 +20,10 @@ public
 final class Console {
     private var bag = Set<AnyCancellable>()
 
+    public
     var logLevel: LogLevel = .debug
 
+    public
     static let shared = Console()
 
     @Published var records: [Record] = []
@@ -72,16 +74,14 @@ extension Console {
             return
         }
 
-        #if DEBUG || RC || adhoc
-            let record = Record(title: title,
-                                message: message,
-                                level: level,
-                                file: file.replace(pattern: "(.*)/"),
-                                function: function,
-                                line: line)
+        let record = Record(title: title,
+                            message: message,
+                            level: level,
+                            file: file.replace(pattern: "(.*)/"),
+                            function: function,
+                            line: line)
 
-            print(record.description)
-            self.records.append(record)
-        #endif
+        print(record.description)
+        self.records.append(record)
     }
 }

@@ -69,8 +69,7 @@ struct SheetViewModifier<T: View>: ViewModifier {
     }
 
     private func sheetOverCardDidClose(dismissable: Bool) -> CB? {
-        guard dismissable
-        else {
+        guard dismissable else {
             return nil
         }
 

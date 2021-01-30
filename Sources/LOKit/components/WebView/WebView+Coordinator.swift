@@ -20,8 +20,8 @@ extension WebView {
 
 // MARK: - class UIScrollViewDelegate
 
-extension WebView.Coordinator {
-    public func viewForZooming(in _: UIScrollView) -> UIView? {
+public extension WebView.Coordinator {
+    func viewForZooming(in _: UIScrollView) -> UIView? {
         nil
     }
 }
@@ -43,8 +43,8 @@ extension WebView {
     }
 }
 
-extension WebView.Coordinator {
-    public func webView(_: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame _: WKFrameInfo, completionHandler: @escaping () -> Void) {
+public extension WebView.Coordinator {
+    func webView(_: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame _: WKFrameInfo, completionHandler: @escaping () -> Void) {
         Console.info(title: "alert", message)
         // Alertift.alert(title: nil, message: message)
         //  .action(.cancel(R.string.localizable.ok())) {
@@ -58,7 +58,7 @@ extension WebView.Coordinator {
         ])
     }
 
-    public func webView(_: WKWebView, createWebViewWith _: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures _: WKWindowFeatures) -> WKWebView? {
+    func webView(_: WKWebView, createWebViewWith _: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures _: WKWindowFeatures) -> WKWebView? {
         Console.log("createWebViewWith for windowFeatures")
         guard let url = navigationAction.request.url, UIApplication.shared.canOpenURL(url) else {
             return nil
@@ -70,8 +70,8 @@ extension WebView.Coordinator {
 
 // MARK: - WebViewNavigationDelegate: NSObject, WKNavigationDelegate
 
-extension WebView.Coordinator {
-    public func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+public extension WebView.Coordinator {
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
         Console.log("didStartProvisionalNavigation")
 
         if let url = webView.url {
@@ -84,7 +84,7 @@ extension WebView.Coordinator {
         }
     }
 
-    public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         Console.log("didFail")
 
         if let url = webView.url {
@@ -96,7 +96,7 @@ extension WebView.Coordinator {
         }
     }
 
-    public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         Console.log("didFinish \(webView.url?.absoluteString ?? "")")
 
         if let url = webView.url {
@@ -108,7 +108,7 @@ extension WebView.Coordinator {
         }
     }
 
-    public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         Console.log("decidePolicyFor")
 
         guard

@@ -39,17 +39,7 @@ extension Console {
 }
 
 struct DetailView_Previews: PreviewProvider {
-    static var record = Console.Record(
-        title: "the title",
-        message: [
-            "hihi",
-            URL(string: "https://google.com")!
-        ],
-        level: .error,
-        file: "./file",
-        function: "func",
-        line: 0
-    )
+    static var record = Console.Record(title: "the title", message: ["hihi", URL(string: "https://google")], level: .error, file: "./file", function: "func", line: 0)
 
     static var previews: some View {
         Console.Detail(record: record)

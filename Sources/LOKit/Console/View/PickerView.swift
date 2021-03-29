@@ -30,5 +30,6 @@ struct PickerView_Previews: PreviewProvider {
 
     static var previews: some View {
         Console.PickerView(selection: $selection)
+            .previewLayout(.sizeThatFits)
     }
 }

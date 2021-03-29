@@ -56,5 +56,6 @@ struct SearchBarView_Previews: PreviewProvider {
 
     static var previews: some View {
         Console.SearchBar(text: $text)
+            .previewLayout(.sizeThatFits)
     }
 }

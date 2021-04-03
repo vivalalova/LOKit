@@ -10,6 +10,7 @@ import SwiftUI
 public
 enum SFSymbol: String, View, CaseIterable {
     case location
+    case locationFill = "location.fill"
 
     public var body: some View {
         Image(systemName: self.rawValue)
@@ -18,7 +19,11 @@ enum SFSymbol: String, View, CaseIterable {
 
 struct SFSymbol_Previews: PreviewProvider {
     static var previews: some View {
-        SFSymbol.location
-            .previewLayout(.sizeThatFits)
+        Group {
+            SFSymbol.locationFill
+                .previewLayout(.sizeThatFits)
+            SFSymbol.location
+                .previewLayout(.sizeThatFits)
+        }
     }
 }

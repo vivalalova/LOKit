@@ -8,10 +8,17 @@
 import SwiftUI
 
 public
-enum SFSymbol: String, View {
+enum SFSymbol: String, View, CaseIterable {
     case location
 
     public var body: some View {
         Image(systemName: self.rawValue)
+    }
+}
+
+struct SFSymbol_Previews: PreviewProvider {
+    static var previews: some View {
+        SFSymbol.location
+            .previewLayout(.sizeThatFits)
     }
 }

@@ -17,7 +17,9 @@ public struct MapView: UIViewRepresentable {
     @Binding var userTrackingMode: MKUserTrackingMode
     @Binding var annotations: [MKAnnotation]
 
-    var viewForAnnotation: (MKAnnotation) -> MKAnnotationView?
+    var viewForAnnotation: (MKAnnotation) -> MKMarkerAnnotationView?
+
+    @Binding var selectedAnnotation: MKAnnotation?
 
     public func makeUIView(context: Context) -> MKMapView {
         let map = MKMapView(frame: .zero)
@@ -31,13 +33,9 @@ public struct MapView: UIViewRepresentable {
 
     public func updateUIView(_ uiView: MKMapView, context: Context) {
         self.setup(uiView)
-
-        uiView.delegate = context.coordinator
     }
 
-    public func makeCoordinator() -> Coordinator {
-        return Coordinator(self)
-    }
+    public func makeCoordinator() -> Coordinator { Coordinator(self) }
 
     public init(mapType: Binding<MKMapType> = .constant(.standard),
                 region: Binding<MKCoordinateRegion?> = .constant(nil),
@@ -46,8 +44,8 @@ public struct MapView: UIViewRepresentable {
                 showsUserLocation: Binding<Bool> = .constant(true),
                 userTrackingMode: Binding<MKUserTrackingMode> = .constant(.follow),
                 annotations: Binding<[MKAnnotation]> = .constant([]),
-                viewForAnnotation: @escaping (MKAnnotation) -> MKAnnotationView? = { _ in nil },
-                selectedAnnotations: Binding<[MKAnnotation]> = .constant([])) {
+                viewForAnnotation: @escaping (MKAnnotation) -> MKMarkerAnnotationView? = { _ in nil },
+                selectedAnnotation: Binding<MKAnnotation?> = .constant(nil)) {
         //
         self._mapType = mapType
         self._coordinateRegion = region
@@ -55,6 +53,8 @@ public struct MapView: UIViewRepresentable {
         self._annotations = annotations
 
         self.viewForAnnotation = viewForAnnotation
+
+        self._selectedAnnotation = selectedAnnotation
     }
 }
 
@@ -69,16 +69,12 @@ extension MapView {
         mapView.userTrackingMode = self.userTrackingMode
         mapView.showsUserLocation = true
     }
-}
 
-// MARK: - For Coordinator MapViewDelegate
-
-private
-extension MapView {
-    func annotationView(annotation: MKAnnotation) -> MKAnnotationView? {
-//        self.annotationsView(annotation)
-        nil
-    }
+//    private func updateAnno(mapView: MKMapView) {
+//        mapView.annotations.filter { annotation in
+//            self.annotations.contains(where: annotation)
+//        }
+//    }
 }
 
 struct MapView_Previews: PreviewProvider {
@@ -140,11 +136,15 @@ public extension MapView.Coordinator {
         self.delegate.viewForAnnotation(annotation)
     }
 
-    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {}
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        self.delegate.selectedAnnotation = view.annotation
+    }
 
-    func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {}
+    func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
+        self.delegate.selectedAnnotation = nil
+    }
 
-    func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {}
+//    func mapView(_ mapView: MKMapView, didAdd views: [MKAnnotationView]) {}
 
     //    func mapView(_ mapView: MKMapView, clusterAnnotationForMemberAnnotations memberAnnotations: [MKAnnotation]) -> MKClusterAnnotation {}
 }

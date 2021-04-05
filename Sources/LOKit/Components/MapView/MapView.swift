@@ -9,6 +9,30 @@ import Combine
 import MapKit
 import SwiftUI
 
+extension CLLocationCoordinate2D: Equatable {
+    public static func == (lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
+        lhs.latitude == rhs.latitude
+            &&
+            lhs.longitude == rhs.longitude
+    }
+}
+
+extension MKCoordinateSpan: Equatable {
+    public static func == (lhs: MKCoordinateSpan, rhs: MKCoordinateSpan) -> Bool {
+        lhs.latitudeDelta == rhs.latitudeDelta
+            &&
+            lhs.longitudeDelta == rhs.longitudeDelta
+    }
+}
+
+extension MKCoordinateRegion: Equatable {
+    public static func == (lhs: MKCoordinateRegion, rhs: MKCoordinateRegion) -> Bool {
+        lhs.center != rhs.center
+            &&
+            lhs.span != rhs.span
+    }
+}
+
 public struct MapView: UIViewRepresentable {
     @State var model = ViedModel()
 
@@ -33,8 +57,8 @@ public struct MapView: UIViewRepresentable {
 
         uiView.showsUserLocation = self.showsUserLocation
 
-        if let region = self.region {
-            uiView.region = region
+        if let region = self.region, region != uiView.region {
+            uiView.setRegion(region, animated: true)
         }
 
         uiView.userTrackingMode = self.userTrackingMode

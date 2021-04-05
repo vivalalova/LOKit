@@ -190,10 +190,12 @@ extension MapView.Coordinator {
 
 public extension MapView.Coordinator {
     func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
-        self.delegate.region = mapView.region
+        //
     }
 
-    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {}
+    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
+        self.delegate.region = mapView.region
+    }
 
     func mapView(_ mapView: MKMapView, didChange mode: MKUserTrackingMode, animated: Bool) {
         self.delegate.userTrackingMode = mode

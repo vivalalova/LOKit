@@ -13,6 +13,7 @@ public struct MapView: UIViewRepresentable {
     @State var model = ViedModel()
 
     @Binding var mapType: MKMapType
+    @Binding var showsUserLocation: Bool
     @Binding var coordinateRegion: MKCoordinateRegion?
     @Binding var userTrackingMode: MKUserTrackingMode
     @Binding var annotations: [MKAnnotation]
@@ -22,22 +23,30 @@ public struct MapView: UIViewRepresentable {
     @Binding var selectedAnnotation: MKAnnotation?
 
     public func makeUIView(context: Context) -> MKMapView {
-        let map = MKMapView(frame: .zero)
-
-        map.delegate = context.coordinator
-
-        self.setup(map)
-
-        return map
+        MKMapView(frame: .zero).config { map in
+            map.delegate = context.coordinator
+        }
     }
 
     public func updateUIView(_ uiView: MKMapView, context: Context) {
-        self.setup(uiView)
+        uiView.mapType = self.mapType
+
+        uiView.showsUserLocation = self.showsUserLocation
+
+        if let region = self.coordinateRegion {
+            uiView.region = region
+        }
+
+        uiView.userTrackingMode = self.userTrackingMode
+
+        uiView.removeAnnotations(uiView.annotations)
+        uiView.addAnnotations(self.annotations)
     }
 
     public func makeCoordinator() -> Coordinator { Coordinator(self) }
 
     public init(mapType: Binding<MKMapType> = .constant(.standard),
+
                 region: Binding<MKCoordinateRegion?> = .constant(nil),
                 isZoomEnabled: Binding<Bool> = .constant(true),
                 isScrollEnabled: Binding<Bool> = .constant(true),
@@ -50,6 +59,7 @@ public struct MapView: UIViewRepresentable {
         self._mapType = mapType
         self._coordinateRegion = region
         self._userTrackingMode = userTrackingMode
+        self._showsUserLocation = showsUserLocation
         self._annotations = annotations
 
         self.viewForAnnotation = viewForAnnotation
@@ -59,17 +69,6 @@ public struct MapView: UIViewRepresentable {
 }
 
 extension MapView {
-    private func setup(_ mapView: MKMapView) {
-        mapView.mapType = self.mapType
-
-        if let region = self.coordinateRegion {
-            mapView.region = region
-        }
-
-        mapView.userTrackingMode = self.userTrackingMode
-        mapView.showsUserLocation = true
-    }
-
 //    private func updateAnno(mapView: MKMapView) {
 //        mapView.annotations.filter { annotation in
 //            self.annotations.contains(where: annotation)
@@ -96,7 +95,10 @@ struct MapView_Previews: PreviewProvider {
     }
 
     static var previews: some View {
-        MapView(annotations: .constant([Anno(lat: 25.015, lng: 121.55)]))
+        MapView(
+            region: .constant(region),
+            annotations: .constant([Anno(lat: 25.015, lng: 121.55)])
+        )
     }
 }
 

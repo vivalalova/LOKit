@@ -9,6 +9,16 @@ import Combine
 import MapKit
 import SwiftUI
 
+extension Equatable {
+    func isEqual(_ rhs: Self) -> Bool {
+        self == rhs
+    }
+
+    func isNotEqual(_ rhs: Self) -> Bool {
+        self != rhs
+    }
+}
+
 extension CLLocationCoordinate2D: Equatable {
     public static func == (lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
         lhs.latitude == rhs.latitude
@@ -27,9 +37,9 @@ extension MKCoordinateSpan: Equatable {
 
 extension MKCoordinateRegion: Equatable {
     public static func == (lhs: MKCoordinateRegion, rhs: MKCoordinateRegion) -> Bool {
-        lhs.center != rhs.center
+        lhs.center == rhs.center
             &&
-            lhs.span != rhs.span
+            lhs.span == rhs.span
     }
 }
 
@@ -92,20 +102,16 @@ public struct MapView: UIViewRepresentable {
     }
 }
 
-extension MapView {
-//    private func updateAnno(mapView: MKMapView) {
-//        mapView.annotations.filter { annotation in
-//            self.annotations.contains(where: annotation)
-//        }
-//    }
-}
-
 struct MapView_Previews: PreviewProvider {
     class Anno: NSObject, MKAnnotation {
         var coordinate: CLLocationCoordinate2D
+        var title: String?
+        var subtitle: String?
 
         init(lat: Double, lng: Double) {
             self.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lng)
+            self.title = ".hihi."
+            self.subtitle = "subtitle"
         }
     }
 

@@ -69,8 +69,8 @@ public struct MapView: UIViewRepresentable {
             uiView.setUserTrackingMode(self.userTrackingMode, animated: true)
         }
 
-//        uiView.removeAnnotations(uiView.annotations)
-//        uiView.addAnnotations(self.annotations)
+        uiView.removeAnnotations(uiView.annotations)
+        uiView.addAnnotations(self.annotations)
     }
 
     public func makeCoordinator() -> Coordinator { Coordinator(self) }
@@ -118,10 +118,8 @@ struct MapView_Previews: PreviewProvider {
     @State static var annotations: [MKAnnotation] = [Anno(lat: 25.015, lng: 121.55)]
 
     static var previews: some View {
-        MapView(
-            region: $region,
-            annotations: $annotations
-        )
+        MapView(region: $region, annotations: $annotations)
+            .edgesIgnoringSafeArea(.all)
     }
 }
 

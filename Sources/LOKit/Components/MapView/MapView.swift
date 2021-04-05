@@ -65,10 +65,12 @@ public struct MapView: UIViewRepresentable {
             uiView.setRegion(region, animated: true)
         }
 
-        uiView.userTrackingMode = self.userTrackingMode
+        if uiView.userTrackingMode != self.userTrackingMode {
+            uiView.userTrackingMode = self.userTrackingMode
+        }
 
-        uiView.removeAnnotations(uiView.annotations)
-        uiView.addAnnotations(self.annotations)
+//        uiView.removeAnnotations(uiView.annotations)
+//        uiView.addAnnotations(self.annotations)
     }
 
     public func makeCoordinator() -> Coordinator { Coordinator(self) }
@@ -110,19 +112,15 @@ struct MapView_Previews: PreviewProvider {
         }
     }
 
-    @State static var region = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 25.015, longitude: 121.55),
-                                                  latitudinalMeters: 1000, longitudinalMeters: 1000)
+    @State static var region: MKCoordinateRegion? = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 25.015, longitude: 121.55),
+                                                                       latitudinalMeters: 1000, longitudinalMeters: 1000)
 
-    @State static var trackingMode: MKUserTrackingMode = .follow
-
-    static var annotationView: (MKAnnotation) -> MKAnnotationView? = { _ in
-        nil
-    }
+    @State static var annotations: [MKAnnotation] = [Anno(lat: 25.015, lng: 121.55)]
 
     static var previews: some View {
         MapView(
-            region: .constant(region),
-            annotations: .constant([Anno(lat: 25.015, lng: 121.55)])
+            region: $region,
+            annotations: $annotations
         )
     }
 }
@@ -184,7 +182,7 @@ extension MapView.Coordinator {
 
 public extension MapView.Coordinator {
     func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
-//        self.delegate.region = mapView.region
+        self.delegate.region = mapView.region
     }
 
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {

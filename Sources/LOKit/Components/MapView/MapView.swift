@@ -66,7 +66,7 @@ public struct MapView: UIViewRepresentable {
         }
 
         if uiView.userTrackingMode != self.userTrackingMode {
-            uiView.userTrackingMode = self.userTrackingMode
+            uiView.setUserTrackingMode(self.userTrackingMode, animated: true)
         }
 
 //        uiView.removeAnnotations(uiView.annotations)
@@ -185,10 +185,7 @@ public extension MapView.Coordinator {
         self.delegate.region = mapView.region
     }
 
-    func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        self.delegate.region = mapView.region
-    }
-
+    // FIXME: always 0
     func mapView(_ mapView: MKMapView, didChange mode: MKUserTrackingMode, animated: Bool) {
         self.delegate.userTrackingMode = mode
     }

@@ -44,9 +44,7 @@ extension MKCoordinateRegion: Equatable {
 }
 
 public struct MapView: UIViewRepresentable {
-    @State var model = ViedModel()
-
-    @State var userLocation: MKUserLocation?
+    @State private(set) var userLocation: MKUserLocation?
 
     @Binding var mapType: MKMapType
     @Binding var showsUserLocation: Bool
@@ -82,7 +80,6 @@ public struct MapView: UIViewRepresentable {
     public func makeCoordinator() -> Coordinator { Coordinator(self) }
 
     public init(mapType: Binding<MKMapType> = .constant(.standard),
-
                 region: Binding<MKCoordinateRegion?> = .constant(nil),
                 isZoomEnabled: Binding<Bool> = .constant(true),
                 isScrollEnabled: Binding<Bool> = .constant(true),
@@ -132,11 +129,6 @@ struct MapView_Previews: PreviewProvider {
             annotations: .constant([Anno(lat: 25.015, lng: 121.55)])
         )
     }
-}
-
-/* ---------------------------------------------------- */
-extension MapView {
-    class ViedModel: ObservableObject {}
 }
 
 /* ---------------------------------------------------- */

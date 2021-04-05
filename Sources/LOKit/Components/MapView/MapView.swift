@@ -9,15 +9,7 @@ import Combine
 import MapKit
 import SwiftUI
 
-extension Equatable {
-    func isEqual(_ rhs: Self) -> Bool {
-        self == rhs
-    }
-
-    func isNotEqual(_ rhs: Self) -> Bool {
-        self != rhs
-    }
-}
+// MARK: - Equatable
 
 extension CLLocationCoordinate2D: Equatable {
     public static func == (lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
@@ -42,6 +34,8 @@ extension MKCoordinateRegion: Equatable {
             lhs.span == rhs.span
     }
 }
+
+// MARK: - MapView UIViewRepresentable
 
 public struct MapView: UIViewRepresentable {
     @State private(set) var userLocation: MKUserLocation?
@@ -101,6 +95,8 @@ public struct MapView: UIViewRepresentable {
     }
 }
 
+// MARK: - Preview
+
 struct MapView_Previews: PreviewProvider {
     class Anno: NSObject, MKAnnotation {
         var coordinate: CLLocationCoordinate2D
@@ -130,8 +126,6 @@ struct MapView_Previews: PreviewProvider {
         )
     }
 }
-
-/* ---------------------------------------------------- */
 
 // MARK: - MapViewCoordinator
 
@@ -190,11 +184,11 @@ extension MapView.Coordinator {
 
 public extension MapView.Coordinator {
     func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
-        //
+        self.delegate.region = mapView.region
     }
 
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        self.delegate.region = mapView.region
+        //
     }
 
     func mapView(_ mapView: MKMapView, didChange mode: MKUserTrackingMode, animated: Bool) {

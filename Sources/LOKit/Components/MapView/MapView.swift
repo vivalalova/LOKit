@@ -46,6 +46,8 @@ extension MKCoordinateRegion: Equatable {
 public struct MapView: UIViewRepresentable {
     @State var model = ViedModel()
 
+    @State var userLocation: MKUserLocation?
+
     @Binding var mapType: MKMapType
     @Binding var showsUserLocation: Bool
     @Binding var region: MKCoordinateRegion?
@@ -67,7 +69,7 @@ public struct MapView: UIViewRepresentable {
 
         uiView.showsUserLocation = self.showsUserLocation
 
-        if let region = self.region, region != uiView.region {
+        if let region = self.region, region != uiView.region, uiView.userTrackingMode != .none {
             uiView.setRegion(region, animated: true)
         }
 
@@ -154,13 +156,18 @@ public extension MapView {
 // MARK: - User Location
 
 public extension MapView.Coordinator {
-    func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {}
+    func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
+        self.delegate.userLocation = userLocation
+    }
 }
 
 // MARK: - Annotation
 
 public extension MapView.Coordinator {
-    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {}
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        Console.log(view)
+        Console.log(control)
+    }
 
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, didChange newState: MKAnnotationView.DragState, fromOldState oldState: MKAnnotationView.DragState) {}
 

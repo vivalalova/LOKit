@@ -61,7 +61,7 @@ public struct MapView: UIViewRepresentable {
 
         uiView.showsUserLocation = self.showsUserLocation
 
-        if let region = self.region, region != uiView.region, uiView.userTrackingMode != .none {
+        if let region = self.region, region != uiView.region, uiView.userTrackingMode == .none {
             uiView.setRegion(region, animated: true)
         }
 
@@ -131,7 +131,7 @@ struct MapView_Previews: PreviewProvider {
 
 public extension MapView {
     final class Coordinator: NSObject, MKMapViewDelegate {
-        let delegate: MapView
+        var delegate: MapView
 
         init(_ delegate: MapView) {
             self.delegate = delegate
@@ -184,11 +184,11 @@ extension MapView.Coordinator {
 
 public extension MapView.Coordinator {
     func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
-        self.delegate.region = mapView.region
+//        self.delegate.region = mapView.region
     }
 
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
-        //
+        self.delegate.region = mapView.region
     }
 
     func mapView(_ mapView: MKMapView, didChange mode: MKUserTrackingMode, animated: Bool) {

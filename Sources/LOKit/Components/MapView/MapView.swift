@@ -14,7 +14,7 @@ public struct MapView: UIViewRepresentable {
 
     @Binding var mapType: MKMapType
     @Binding var showsUserLocation: Bool
-    @Binding var coordinateRegion: MKCoordinateRegion?
+    @Binding var region: MKCoordinateRegion?
     @Binding var userTrackingMode: MKUserTrackingMode
     @Binding var annotations: [MKAnnotation]
 
@@ -33,7 +33,7 @@ public struct MapView: UIViewRepresentable {
 
         uiView.showsUserLocation = self.showsUserLocation
 
-        if let region = self.coordinateRegion {
+        if let region = self.region {
             uiView.region = region
         }
 
@@ -57,7 +57,7 @@ public struct MapView: UIViewRepresentable {
                 selectedAnnotation: Binding<MKAnnotation?> = .constant(nil)) {
         //
         self._mapType = mapType
-        self._coordinateRegion = region
+        self._region = region
         self._userTrackingMode = userTrackingMode
         self._showsUserLocation = showsUserLocation
         self._annotations = annotations
@@ -161,7 +161,7 @@ extension MapView.Coordinator {
 
 public extension MapView.Coordinator {
     func mapViewDidChangeVisibleRegion(_ mapView: MKMapView) {
-        self.delegate.coordinateRegion = mapView.region
+        self.delegate.region = mapView.region
     }
 
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {}

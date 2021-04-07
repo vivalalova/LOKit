@@ -6,7 +6,6 @@
 //
 
 import Combine
-import LOKit
 import MapKit
 import SwiftUI
 
@@ -38,7 +37,8 @@ extension MKCoordinateRegion: Equatable {
 
 // MARK: - MapView UIViewRepresentable
 
-public typealias Annotation = NSObject & MKAnnotation
+// public typealias Annotation = NSObject & MKAnnotation
+public protocol Annotation: MKAnnotation {}
 
 public struct MapView: UIViewRepresentable {
     @State private(set) var userLocation: MKUserLocation?
@@ -84,7 +84,7 @@ public struct MapView: UIViewRepresentable {
                 isScrollEnabled: Binding<Bool> = .constant(true),
                 showsUserLocation: Binding<Bool> = .constant(true),
                 userTrackingMode: Binding<MKUserTrackingMode> = .constant(.follow),
-                annotations: Binding<[NSObject & MKAnnotation]> = .constant([]),
+                annotations: Binding<[Annotation]> = .constant([]),
                 viewForAnnotation: @escaping (MKAnnotation) -> MKMarkerAnnotationView? = { _ in nil },
                 selectedAnnotation: Binding<MKAnnotation?> = .constant(nil)) {
         //
@@ -103,7 +103,7 @@ public struct MapView: UIViewRepresentable {
 // MARK: - Preview
 
 struct MapView_Previews: PreviewProvider {
-    class Anno: Annotation {
+    class Anno: NSObject, Annotation {
         var coordinate: CLLocationCoordinate2D
         var title: String?
         var subtitle: String?

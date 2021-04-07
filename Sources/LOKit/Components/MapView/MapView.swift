@@ -38,6 +38,8 @@ extension MKCoordinateRegion: Equatable {
 
 // MARK: - MapView UIViewRepresentable
 
+public typealias Annotation = NSObject & MKAnnotation
+
 public struct MapView: UIViewRepresentable {
     @State private(set) var userLocation: MKUserLocation?
 
@@ -45,7 +47,7 @@ public struct MapView: UIViewRepresentable {
     @Binding var showsUserLocation: Bool
     @Binding var region: MKCoordinateRegion?
     @Binding var userTrackingMode: MKUserTrackingMode
-    @Binding var annotations: [NSObject & MKAnnotation]
+    @Binding var annotations: [Annotation]
 
     var viewForAnnotation: (MKAnnotation) -> MKMarkerAnnotationView?
 
@@ -101,7 +103,7 @@ public struct MapView: UIViewRepresentable {
 // MARK: - Preview
 
 struct MapView_Previews: PreviewProvider {
-    class Anno: NSObject, MKAnnotation {
+    class Anno: Annotation {
         var coordinate: CLLocationCoordinate2D
         var title: String?
         var subtitle: String?
@@ -116,7 +118,7 @@ struct MapView_Previews: PreviewProvider {
     @State static var region: MKCoordinateRegion? = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 25.015, longitude: 121.55),
                                                                        latitudinalMeters: 1000, longitudinalMeters: 1000)
 
-    @State static var annotations: [NSObject & MKAnnotation] = [Anno(lat: 25.015, lng: 121.55)]
+    @State static var annotations: [Annotation] = [Anno(lat: 25.015, lng: 121.55)]
 
     static var previews: some View {
         MapView(region: $region, annotations: $annotations)

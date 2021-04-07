@@ -6,6 +6,7 @@
 //
 
 import Combine
+import LOKit
 import MapKit
 import SwiftUI
 
@@ -44,7 +45,7 @@ public struct MapView: UIViewRepresentable {
     @Binding var showsUserLocation: Bool
     @Binding var region: MKCoordinateRegion?
     @Binding var userTrackingMode: MKUserTrackingMode
-    @Binding var annotations: [MKAnnotation]
+    @Binding var annotations: [NSObject & MKAnnotation]
 
     var viewForAnnotation: (MKAnnotation) -> MKMarkerAnnotationView?
 
@@ -81,7 +82,7 @@ public struct MapView: UIViewRepresentable {
                 isScrollEnabled: Binding<Bool> = .constant(true),
                 showsUserLocation: Binding<Bool> = .constant(true),
                 userTrackingMode: Binding<MKUserTrackingMode> = .constant(.follow),
-                annotations: Binding<[MKAnnotation]> = .constant([]),
+                annotations: Binding<[NSObject & MKAnnotation]> = .constant([]),
                 viewForAnnotation: @escaping (MKAnnotation) -> MKMarkerAnnotationView? = { _ in nil },
                 selectedAnnotation: Binding<MKAnnotation?> = .constant(nil)) {
         //
@@ -115,7 +116,7 @@ struct MapView_Previews: PreviewProvider {
     @State static var region: MKCoordinateRegion? = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 25.015, longitude: 121.55),
                                                                        latitudinalMeters: 1000, longitudinalMeters: 1000)
 
-    @State static var annotations: [MKAnnotation] = [Anno(lat: 25.015, lng: 121.55)]
+    @State static var annotations: [NSObject & MKAnnotation] = [Anno(lat: 25.015, lng: 121.55)]
 
     static var previews: some View {
         MapView(region: $region, annotations: $annotations)

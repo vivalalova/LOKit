@@ -9,36 +9,20 @@ import Combine
 import MapKit
 import SwiftUI
 
-// MARK: - Equatable
-
-extension CLLocationCoordinate2D: Equatable {
-    public static func == (lhs: CLLocationCoordinate2D, rhs: CLLocationCoordinate2D) -> Bool {
-        lhs.latitude == rhs.latitude
-            &&
-            lhs.longitude == rhs.longitude
-    }
-}
-
-extension MKCoordinateSpan: Equatable {
-    public static func == (lhs: MKCoordinateSpan, rhs: MKCoordinateSpan) -> Bool {
-        lhs.latitudeDelta == rhs.latitudeDelta
-            &&
-            lhs.longitudeDelta == rhs.longitudeDelta
-    }
-}
-
-extension MKCoordinateRegion: Equatable {
-    public static func == (lhs: MKCoordinateRegion, rhs: MKCoordinateRegion) -> Bool {
-        lhs.center == rhs.center
-            &&
-            lhs.span == rhs.span
-    }
-}
-
 // MARK: - MapView UIViewRepresentable
 
 // public typealias Annotation = NSObject & MKAnnotation
-public protocol Annotation: MKAnnotation {}
+public class Annotation: NSObject, MKAnnotation {
+    public var coordinate: CLLocationCoordinate2D
+    public var title: String?
+    public var subtitle: String?
+
+    public init(title: String? = nil, subtitle: String? = nil, lat: Double, lng: Double) {
+        self.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lng)
+        self.title = title
+        self.subtitle = subtitle
+    }
+}
 
 public struct MapView: UIViewRepresentable {
     @State private(set) var userLocation: MKUserLocation?
@@ -103,22 +87,10 @@ public struct MapView: UIViewRepresentable {
 // MARK: - Preview
 
 struct MapView_Previews: PreviewProvider {
-    class Anno: NSObject, Annotation {
-        var coordinate: CLLocationCoordinate2D
-        var title: String?
-        var subtitle: String?
-
-        init(lat: Double, lng: Double) {
-            self.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lng)
-            self.title = ".hihi."
-            self.subtitle = "subtitle"
-        }
-    }
-
     @State static var region: MKCoordinateRegion? = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 25.015, longitude: 121.55),
                                                                        latitudinalMeters: 1000, longitudinalMeters: 1000)
 
-    @State static var annotations: [Annotation] = [Anno(lat: 25.015, lng: 121.55)]
+    @State static var annotations: [Annotation] = [Annotation(lat: 25.015, lng: 121.55)]
 
     static var previews: some View {
         MapView(region: $region, annotations: $annotations)

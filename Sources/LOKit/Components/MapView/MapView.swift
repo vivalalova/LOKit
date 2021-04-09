@@ -44,20 +44,22 @@ public struct MapView: UIViewRepresentable {
     }
 
     public func updateUIView(_ uiView: MKMapView, context: Context) {
-        uiView.mapType = self.mapType
+        DispatchQueue.main.async {
+            uiView.mapType = self.mapType
 
-        uiView.showsUserLocation = self.showsUserLocation
+            uiView.showsUserLocation = self.showsUserLocation
 
-        if let region = self.region, region != uiView.region, uiView.userTrackingMode == .none {
-            uiView.setRegion(region, animated: true)
+            if let region = self.region, region != uiView.region, uiView.userTrackingMode == .none {
+                uiView.setRegion(region, animated: true)
+            }
+
+            if uiView.userTrackingMode != self.userTrackingMode {
+                uiView.setUserTrackingMode(self.userTrackingMode, animated: true)
+            }
+
+            uiView.removeAnnotations(uiView.annotations)
+            uiView.addAnnotations(self.annotations)
         }
-
-        if uiView.userTrackingMode != self.userTrackingMode {
-            uiView.setUserTrackingMode(self.userTrackingMode, animated: true)
-        }
-
-        uiView.removeAnnotations(uiView.annotations)
-        uiView.addAnnotations(self.annotations)
     }
 
     public func makeCoordinator() -> Coordinator { Coordinator(self) }
@@ -158,7 +160,6 @@ public extension MapView.Coordinator {
         self.delegate.region = mapView.region
     }
 
-    // FIXME: always 0
     func mapView(_ mapView: MKMapView, didChange mode: MKUserTrackingMode, animated: Bool) {
         self.delegate.userTrackingMode = mode
     }

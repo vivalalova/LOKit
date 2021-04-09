@@ -32,3 +32,13 @@ extension MKCoordinateRegion: Equatable {
             lhs.span == rhs.span
     }
 }
+
+extension Array where Element: Equatable {
+    static func - (lhs: Self, rhs: Self) -> Self {
+        lhs.filter { lh in
+            !rhs.contains { rh in
+                rh == lh
+            }
+        }
+    }
+}

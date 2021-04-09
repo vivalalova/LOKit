@@ -57,8 +57,7 @@ public struct MapView: UIViewRepresentable {
                 uiView.setUserTrackingMode(self.userTrackingMode, animated: true)
             }
 
-            uiView.removeAnnotations(uiView.annotations)
-            uiView.addAnnotations(self.annotations)
+            self.updateAnnotations(in: uiView)
         }
     }
 
@@ -83,6 +82,15 @@ public struct MapView: UIViewRepresentable {
         self.viewForAnnotation = viewForAnnotation
 
         self._selectedAnnotation = selectedAnnotation
+    }
+
+    private func updateAnnotations(in mapView: MKMapView) {
+        guard mapView.mapAnnotations != self.annotations else {
+            return
+        }
+
+        mapView.removeAnnotations(mapView.mapAnnotations - self.annotations)
+        mapView.addAnnotations(self.annotations - mapView.mapAnnotations)
     }
 }
 

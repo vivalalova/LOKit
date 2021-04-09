@@ -45,9 +45,13 @@ public struct MapView: UIViewRepresentable {
 
     public func updateUIView(_ uiView: MKMapView, context: Context) {
         DispatchQueue.main.async {
-            uiView.mapType = self.mapType
+            if uiView.mapType != self.mapType {
+                uiView.mapType = self.mapType
+            }
 
-            uiView.showsUserLocation = self.showsUserLocation
+            if uiView.showsUserLocation != self.showsUserLocation {
+                uiView.showsUserLocation = self.showsUserLocation
+            }
 
             if let region = self.region, region != uiView.region, uiView.userTrackingMode == .none {
                 uiView.setRegion(region, animated: true)

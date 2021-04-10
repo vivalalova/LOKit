@@ -42,5 +42,6 @@ struct Row_Previews: PreviewProvider {
 
     static var previews: some View {
         Console.Row(record: record)
+            .previewLayout(.sizeThatFits)
     }
 }

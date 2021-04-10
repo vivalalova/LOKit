@@ -59,5 +59,6 @@ extension Console {
 struct ConsoleView_Previews: PreviewProvider {
     static var previews: some View {
         Console.Scene()
+            .previewLayout(.sizeThatFits)
     }
 }

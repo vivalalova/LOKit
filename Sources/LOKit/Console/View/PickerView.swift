@@ -9,7 +9,6 @@ import SwiftUI
 
 extension Console {
     struct PickerView: View {
-
         @Binding var selection: Int
 
         var body: some View {

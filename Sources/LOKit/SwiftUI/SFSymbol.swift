@@ -11,6 +11,7 @@ public
 enum SFSymbol: String, View, CaseIterable {
     case location
     case locationFill = "location.fill"
+    case locationNorth = "location.north.fill"
 
     public var body: some View {
         Image(systemName: self.rawValue)

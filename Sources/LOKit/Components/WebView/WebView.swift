@@ -23,6 +23,7 @@ struct WebView: UIViewRepresentable {
 
     public
     init(model: Model, canReload: Bool = true, viewModel: ((Model) -> Void)? = nil) {
+        // FIXME: recreated
         self._model = StateObject(wrappedValue: model)
 
         self.canReload = canReload

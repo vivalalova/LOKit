@@ -11,14 +11,19 @@ import SwiftUI
 
 // MARK: - MapView UIViewRepresentable
 
-// public typealias Annotation = NSObject & MKAnnotation
-public class Annotation: NSObject, MKAnnotation {
+open class Annotation: NSObject, MKAnnotation {
     public var coordinate: CLLocationCoordinate2D
     public var title: String?
     public var subtitle: String?
 
     public init(title: String? = nil, subtitle: String? = nil, lat: Double, lng: Double) {
         self.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lng)
+        self.title = title
+        self.subtitle = subtitle
+    }
+
+    public init(title: String? = nil, subtitle: String? = nil, coordinate: CLLocationCoordinate2D) {
+        self.coordinate = coordinate
         self.title = title
         self.subtitle = subtitle
     }
@@ -92,6 +97,14 @@ public struct MapView: UIViewRepresentable {
 // MARK: - Preview
 
 struct MapView_Previews: PreviewProvider {
+//    class AA: Annotation {
+//        var coordinate: CLLocationCoordinate2D
+//
+//        init(lat: Double, lng: Double) {
+//            self.coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lng)
+//        }
+//    }
+
     @State static var region: MKCoordinateRegion? = MKCoordinateRegion(center: CLLocationCoordinate2D(latitude: 25.015, longitude: 121.55),
                                                                        latitudinalMeters: 1000, longitudinalMeters: 1000)
 

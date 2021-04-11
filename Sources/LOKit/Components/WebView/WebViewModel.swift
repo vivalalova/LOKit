@@ -21,9 +21,9 @@ extension WebView {
     final class Model: ObservableObject {
         var bag = Set<AnyCancellable>()
 
-        public let webView: WKWebView
+        let webView: WKWebView
 
-        @Published public var title: String = ""
+        @Published public private(set) var title: String = ""
 
         // MARK: - variables
 

@@ -12,79 +12,89 @@ import WebKit
 
 public
 struct WebView: UIViewRepresentable {
-    @StateObject var model: Model
+    @EnvironmentObject var model: ViewModel
 
-    // MARK: - variables
+    public func makeCoordinator() -> Coordinator { Coordinator(self) }
 
-    var canReload = true
+    public func makeUIView(context: Context) -> WKWebView { self.model.webView }
 
-    /// life cycle
-    var viewModel: ((Model) -> Void)?
-
-    public
-    init(model: Model, canReload: Bool = true, viewModel: ((Model) -> Void)? = nil) {
-        // FIXME: recreated
-        self._model = StateObject(wrappedValue: model)
-
-        self.canReload = canReload
-        self.viewModel = viewModel
+    public func updateUIView(_ uiView: WKWebView, context: Context) {
+        uiView.uiDelegate = context.coordinator
     }
 
-    // MARK: - life cycle
+    public init() {}
+}
 
-    public
-    func makeCoordinator() -> Coordinator {
-        Coordinator(model: self.model)
-    }
+public extension WebView {
+    class ViewModel: ObservableObject {
+        private var bag = Set<AnyCancellable>()
 
-    public
-    func makeUIView(context: Context) -> WKWebView {
-        self.model.webView.uiDelegate = context.coordinator
-        self.model.webView.navigationDelegate = context.coordinator
-        self.model.webView.scrollView.delegate = context.coordinator
+        @Published fileprivate var webView: WKWebView
 
-        if self.canReload {
-            self.model.webView.scrollView.refreshControl = self.refreshControl()
+        @Published private(set) var url: String?
+        @Published private(set) var title: String? = nil
+
+        public
+        init(
+            webView: WKWebView = WKWebView(),
+            url: String? = nil
+        ) {
+            self.webView = webView
+            self.url = url
+
+            self.load(self.url)
+
+            self.webView
+                .publisher(for: \.title)
+                .assign(to: \.title, on: self)
+                .store(in: &self.bag)
+
+            self.webView
+                .publisher(for: \.url)
+                .map(\.?.absoluteString)
+                .assign(to: \.url, on: self)
+                .store(in: &self.bag)
         }
 
-        self.reload()
+        @discardableResult
+        public func load(_ url: String?) -> Bool {
+            guard let string = url, let url = URL(string: string) else {
+                return false
+            }
 
-        self.viewModel?(self.model)
+            let request = URLRequest(url: url)
+            self.webView.load(request)
 
-        return self.model.webView
-    }
-
-    public func updateUIView(_ uiView: WKWebView, context con: Context) {
-        //
-    }
-
-    // MARK: - private functions
-
-    private func reload() {
-        guard let u = self.model.url else {
-            Console.log("nil url")
-            return
+            return true
         }
-        Console.log("has url")
 
-        let url = self.model.willLoad?(u) ?? u
-        Console.log(url)
-        self.model.webView.load(url)
+        public func reload() { self.webView.reload() }
+        public func goBack() { self.webView.goBack() }
+        public func goForward() { self.webView.goForward() }
     }
+}
 
-    private func refreshControl() -> UIRefreshControl {
-        UIRefreshControl(frame: CGRect.zero, primaryAction: UIAction { [self] _ in
-            self.reload()
-        })
+public extension WebView {
+    class Coordinator: NSObject, WKUIDelegate {
+        var parent: WebView
+
+        init(_ parent: WebView) {
+            self.parent = parent
+        }
+
+        // Delegate methods go here
+
+        public func webView(_ webView: WKWebView, runJavaScriptAlertPanelWithMessage message: String, initiatedByFrame frame: WKFrameInfo, completionHandler: @escaping () -> Void) {
+            // alert functionality goes here
+        }
     }
 }
 
 struct WebView_Previews: PreviewProvider {
+    @State static var url: String? = "https://google.com.tw"
+
     static var previews: some View {
-        WebView(
-            model: WebView.Model(url: URL(string: "https://google.com.tw"),
-                                 startLoading: { _ in true },
-                                 loadingCompleted: { _ in })
-        )
+        WebView()
+            .environmentObject(WebView.ViewModel(url: url))
     }
 }

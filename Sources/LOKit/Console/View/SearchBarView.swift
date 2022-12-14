@@ -1,6 +1,6 @@
 //
 //  SearchBarView.swift
-//  taxigo-rider-ios
+
 //
 //  Created by lova on 2020/12/15.
 //
@@ -56,5 +56,6 @@ struct SearchBarView_Previews: PreviewProvider {
 
     static var previews: some View {
         Console.SearchBar(text: $text)
+            .previewLayout(.sizeThatFits)
     }
 }

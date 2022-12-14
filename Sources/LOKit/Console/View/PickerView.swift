@@ -1,6 +1,6 @@
 //
 //  PickerView.swift
-//  taxigo-rider-ios
+
 //
 //  Created by lova on 2020/12/15.
 //
@@ -9,7 +9,6 @@ import SwiftUI
 
 extension Console {
     struct PickerView: View {
-
         @Binding var selection: Int
 
         var body: some View {
@@ -30,5 +29,6 @@ struct PickerView_Previews: PreviewProvider {
 
     static var previews: some View {
         Console.PickerView(selection: $selection)
+            .previewLayout(.sizeThatFits)
     }
 }

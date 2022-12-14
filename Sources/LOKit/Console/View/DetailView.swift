@@ -1,6 +1,6 @@
 //
 //  DetailView.swift
-//  taxigo-rider-ios
+
 //
 //  Created by lova on 2020/12/15.
 //
@@ -19,9 +19,9 @@ extension Console {
         var body: some View {
             VStack(alignment: .leading) {
                 VStack(alignment: .leading) {
-                    Text("file:").foregroundColor(.gray) + Text(record.file)
-                    Text("line:").foregroundColor(.gray) + Text("\(record.line)")
-                    Text("function:").foregroundColor(.gray) + Text(record.function)
+                    Text("File:").foregroundColor(.gray) + Text(record.file)
+                    Text("Line:").foregroundColor(.gray) + Text("\(record.line)")
+                    Text("Function:").foregroundColor(.gray) + Text(record.function)
                 }
 
                 Divider()
@@ -43,5 +43,6 @@ struct DetailView_Previews: PreviewProvider {
 
     static var previews: some View {
         Console.Detail(record: record)
+            .previewLayout(.sizeThatFits)
     }
 }

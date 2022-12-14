@@ -1,6 +1,6 @@
 //
 //  UIApplication+.swift
-//  taxigo-rider-ios
+
 //
 //  Created by lova on 2020/12/10.
 //

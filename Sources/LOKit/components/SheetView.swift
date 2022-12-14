@@ -1,6 +1,5 @@
 //
 //  SlideOverCard.swift
-//  taxigo-bus-iOS
 //
 //  Created by lova on 2020/10/20.
 //
@@ -69,8 +68,7 @@ struct SheetViewModifier<T: View>: ViewModifier {
     }
 
     private func sheetOverCardDidClose(dismissable: Bool) -> CB? {
-        guard dismissable
-        else {
+        guard dismissable else {
             return nil
         }
 

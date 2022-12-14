@@ -1,6 +1,6 @@
 //
 //  ConsoleView.swift
-//  taxigo-rider-ios
+
 //
 //  Created by lova on 2020/12/9.
 //
@@ -59,5 +59,6 @@ extension Console {
 struct ConsoleView_Previews: PreviewProvider {
     static var previews: some View {
         Console.Scene()
+            .previewLayout(.sizeThatFits)
     }
 }

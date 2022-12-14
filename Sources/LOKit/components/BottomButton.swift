@@ -1,9 +1,7 @@
 //
 //  BottomBUtton.swift
-//  TaxiGoRider-iOS
 //
 //  Created by Lova on 2019/11/24.
-//  Copyright © 2019 taxigo. All rights reserved.
 //
 
 import SwiftUI

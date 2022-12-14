@@ -1,6 +1,6 @@
 //
 //  Row.swift
-//  taxigo-rider-ios
+
 //
 //  Created by lova on 2020/12/15.
 //
@@ -42,5 +42,6 @@ struct Row_Previews: PreviewProvider {
 
     static var previews: some View {
         Console.Row(record: record)
+            .previewLayout(.sizeThatFits)
     }
 }
